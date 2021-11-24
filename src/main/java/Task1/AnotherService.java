@@ -23,7 +23,7 @@ public class AnotherService {
         rawStudents = data.split("\n");
         for (String s : rawStudents) {
             infoStudent = s.split(",");
-            Student newStudent = new Student(infoStudent[0], infoStudent[1], infoStudent[2], infoStudent[3]);
+            Student newStudent = new Student(infoStudent[0], infoStudent[1], infoStudent[2], infoStudent[3].substring(0, 10));
             accounts.add(newStudent);
         }
         return accounts;
@@ -32,6 +32,9 @@ public class AnotherService {
     public String getGroupName(String path) {
         int i = path.lastIndexOf("\\");
         String groupName = path.substring(i + 1);
+
+        i = groupName.indexOf(".");
+        groupName = groupName.substring(0, i);
         return groupName;
     }
 }

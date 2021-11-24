@@ -19,4 +19,4 @@ public class Main {
     }
 }
 
-// java -jar student-manager.jar updateDB c:/someFolder/studentDir/
+// java -jar student-manager.jar updateDB C:\Users\1292354\IdeaProjects\interfaceProject\src\main\2570

@@ -32,7 +32,7 @@ public class DatabaseService {
                 int groupId = -1;
                 String query = "SELECT * FROM `group` WHERE (`group_name` = '" + groupName + "');";
                 ResultSet resultSet = statement.executeQuery(query);
-                while (resultSet.next() || groupId != -1) {
+                while (resultSet.next()) {
                     groupId = resultSet.getInt("id");
                 }
                 // если группы нет в бд
@@ -42,16 +42,23 @@ public class DatabaseService {
                     // находим id новой группы
                     query = "SELECT * FROM `group` WHERE (`group_name` = '" + groupName + "');";
                     resultSet = statement.executeQuery(query);
-                    while (resultSet.next() || groupId != -1) {
+                    while (resultSet.next()) {
                         groupId = resultSet.getInt("id");
                     }
                 }
 
-                // добавляем студента в бд
-                query = "INSERT INTO students (`last_name`, `first_name`, `second_name`, `birthday_date`, `group_id`) " +
-                        "VALUES ('" + student.getLastName() + "', '" + student.getFirstName() + "', '" + "', '" + student.getSecondName() + "', " +
-                        "'" + "', '" + student.getBirthdayDate() + "', '" + groupId + "');";
-                statement.executeUpdate(query);
+                // проверяем, есть ли студент в бд
+                boolean isStudentExist = false;
+                query = "SELECT * FROM student WHERE (`last_name` = '" + student.getLastName() + "') AND (`first_name` = '" + student.getFirstName() + "') AND (`second_name` = '" + student.getSecondName() + "') AND (`birthday_date` = '" + student.getBirthdayDate() + "');";
+                resultSet = statement.executeQuery(query);
+                while (resultSet.next()) {
+                    isStudentExist = true;
+                }
+                if (!isStudentExist) {
+                    // добавляем студента в бд
+                    query = "INSERT INTO student (`group_id`, `last_name`, `first_name`, `second_name`, `birthday_date`) VALUES ('" + groupId + "', '" + student.getLastName() + "', '" + student.getFirstName() + "', '" + student.getSecondName() + "', '" + student.getBirthdayDate() + "');";
+                    statement.executeUpdate(query);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
